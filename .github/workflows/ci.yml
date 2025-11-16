@@ -41,8 +41,8 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
           tag: ${{ matrix.tag }}
-          module-name: 88x2eu
-          module-path: 88x2eu
+          module-name: 8812eu
+          module-path: 8812eu
 
   upload-artifact:
     name: Upload LKM Source Code
@@ -54,5 +54,5 @@ jobs:
       - name: Upload LKM Source Code
         uses: actions/upload-artifact@v4
         with:
-          name: 88x2eu
-          path: .github/88x2eu
+          name: 8812eu
+          path: .github/8812eu
