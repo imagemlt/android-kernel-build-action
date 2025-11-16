@@ -47,10 +47,6 @@ runs:
           echo "${{ inputs.module-name }}/Makefile does not exist."
           exit 3
         fi
-        if [ ! -f "${{ inputs.module-name }}/${{ inputs.module-name }}.c" ]; then
-          echo "Error: ${inputs.module-name}/${inputs.module-name}.c does not exist."
-          exit 4
-        fi
 
     - name: Install Build Tools
       uses: awalsh128/cache-apt-pkgs-action@latest
