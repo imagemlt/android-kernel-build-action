@@ -41,8 +41,8 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
           tag: ${{ matrix.tag }}
-          module-name: hello-ko
-          module-path: hello-ko
+          module-name: 88x2eu
+          module-path: 88x2eu
 
   upload-artifact:
     name: Upload LKM Source Code
@@ -54,5 +54,5 @@ jobs:
       - name: Upload LKM Source Code
         uses: actions/upload-artifact@v4
         with:
-          name: hello-ko
-          path: .github/hello-ko
+          name: 88x2eu
+          path: .github/88x2eu
