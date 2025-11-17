@@ -1,3 +1,11 @@
-menu "Kernel Driver"
+menu "Realtek 88x2eu USB WiFi driver"
+
+config RTL8822EU
+	tristate "Realtek RTL8822EU USB WiFi support"
+	depends on USB
+	default m
+	help
+	  Say Y or M to build the Realtek RTL8822EU USB WiFi driver.
+	  The module file is named 88x2eu.ko.
 
 endmenu

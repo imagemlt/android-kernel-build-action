@@ -2482,7 +2482,7 @@ endif
 
 endif
 
-USER_MODULE_NAME ?=
+USER_MODULE_NAME ?= 88x2eu
 ifneq ($(USER_MODULE_NAME),)
 MODULE_NAME := $(USER_MODULE_NAME)
 endif
