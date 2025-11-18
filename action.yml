@@ -89,6 +89,8 @@ runs:
           grep -q "${{ inputs.module-name }}" "$DRIVER_KCONFIG" || sed -i "/endmenu/i\\source \"drivers/${{ inputs.module-name }}/Kconfig\"" "$DRIVER_KCONFIG"
         fi
         # Ensure module Makefile exists
+        ls -al $GKI_ROOT/common/drivers/${{ inputs.module-name }}
+        echo "LSLSLSLLSLSLSLSLSLS##################################"
         if [ ! -f $GKI_ROOT/common/drivers/${{ inputs.module-name }}/Makefile ]; then
           echo "obj-m += ${{ inputs.module-name }}.o" > $GKI_ROOT/common/drivers/${{ inputs.module-name }}/Makefile
         fi
