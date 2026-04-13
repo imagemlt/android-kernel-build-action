@@ -136,9 +136,21 @@ runs:
       run: |
         repo status
         # Create abi_gki_protected_exports file if missing (required for Bazel build)
-        if [ ! -f common/android/abi_gki_protected_exports_aarch64 ]; then
-          echo "[+] Creating missing abi_gki_protected_exports_aarch64"
-          touch common/android/abi_gki_protected_exports_aarch64
+        ABI_PROTECTED_EXPORTS=""
+        for candidate in \
+          common/android/abi_gki_protected_exports_aarch64 \
+          common/abi_gki_protected_exports_aarch64 \
+          common/android/abi_gki_protected_exports; do
+          if [ -d "$(dirname "$candidate")" ]; then
+            ABI_PROTECTED_EXPORTS="$candidate"
+            break
+          fi
+        done
+        if [ -n "$ABI_PROTECTED_EXPORTS" ] && [ ! -f "$ABI_PROTECTED_EXPORTS" ]; then
+          echo "[+] Creating missing $(basename "$ABI_PROTECTED_EXPORTS") at $ABI_PROTECTED_EXPORTS"
+          touch "$ABI_PROTECTED_EXPORTS"
+        elif [ -z "$ABI_PROTECTED_EXPORTS" ]; then
+          echo "[!] Skipping abi_gki_protected_exports setup: no known target directory exists"
         fi
         git config --global user.email "bot@github.actions.org"
         git config --global user.name "github.actions"

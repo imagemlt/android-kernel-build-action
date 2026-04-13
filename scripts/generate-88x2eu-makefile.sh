@@ -65,6 +65,7 @@ EXTRA_CFLAGS += -DCONFIG_REGD_SRC_FROM_OS -DCONFIG_RTW_TX_NPATH_EN
 EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
 EXTRA_CFLAGS += -DCONFIG_RTW_SDIO_PM_KEEP_POWER
 EXTRA_CFLAGS += -I$(src)/include -I$(src)/platform -I$(src)/hal/btc
+EXTRA_CFLAGS += -I$(srctree)/drivers/88x2eu/include -I$(srctree)/drivers/88x2eu/platform -I$(srctree)/drivers/88x2eu/hal/btc
 EXTRA_CFLAGS += -Wno-unused-variable -Wno-unused-value -Wno-unused-label
 EXTRA_CFLAGS += -Wno-unused-parameter -Wno-unused-function -Wno-unused
 EXTRA_CFLAGS += -Wno-uninitialized
@@ -77,6 +78,7 @@ endif
 HCI_NAME := usb
 RTL871X := rtl8822e
 ccflags-y += $(EXTRA_CFLAGS)
+subdir-ccflags-y += $(EXTRA_CFLAGS)
 
 # OS interface files
 _OS_INTFS_FILES := os_dep/osdep_service.o \
