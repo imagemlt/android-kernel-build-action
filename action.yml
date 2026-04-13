@@ -189,7 +189,25 @@ runs:
         mkdir output
         ls -al $OUTDIR/
         cp $OUTDIR/*Image* ./output/
-        cp $OUTDIR/${{ inputs.module-name }}.ko ./output/${{ inputs.tag }}_${{ inputs.module-name }}.ko
+        MODULE_CANDIDATES=(
+          "${{ inputs.module-name }}.ko"
+          "88x2eu.ko"
+          "8812eu.ko"
+        )
+        MODULE_PATH=""
+        for module in "${MODULE_CANDIDATES[@]}"; do
+          MODULE_PATH=$(find android-kernel -type f -name "$module" | head -n 1)
+          if [ -n "$MODULE_PATH" ]; then
+            break
+          fi
+        done
+        if [ -z "$MODULE_PATH" ]; then
+          echo "[!] Failed to locate a built kernel module artifact"
+          find android-kernel -type f \( -name '*.ko' -o -name 'modules.order' \) | sed -n '1,200p'
+          exit 1
+        fi
+        echo "[+] Using module artifact: $MODULE_PATH"
+        cp "$MODULE_PATH" "./output/${{ inputs.tag }}_${{ inputs.module-name }}.ko"
 
     - name: Upload Kernel Artifacts
       uses: actions/upload-artifact@v4

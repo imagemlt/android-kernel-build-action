@@ -76,8 +76,6 @@ endif
 
 HCI_NAME := usb
 RTL871X := rtl8822e
-MODULE_NAME := 8812eu
-
 ccflags-y += $(EXTRA_CFLAGS)
 
 # OS interface files
@@ -302,7 +300,8 @@ _PLATFORM_FILES := platform/platform_ops.o
 # Final module object list
 88x2eu-objs := $(rtk_core) $(_OS_INTFS_FILES) $(_HAL_INTFS_FILES) $(_HALMAC_FILES) $(_BTC_FILES) $(_PHYDM_FILES) $(_PLATFORM_FILES)
 
-obj-$(CONFIG_RTL8822EU) += 88x2eu.o
+# Force in-tree module build even when no Kconfig symbol is enabled.
+obj-m += 88x2eu.o
 MAKEFILE_END
 
 echo "[+] Generated 88x2eu Makefile in $OUTPUT_DIR"
