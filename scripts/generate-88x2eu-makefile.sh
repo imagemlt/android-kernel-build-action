@@ -1,11 +1,17 @@
 #!/bin/bash
 # Generate a compatible Makefile for 88x2eu Realtek WiFi driver for Android GKI
-# Usage: generate-88x2eu-makefile.sh <output_dir>
+# Usage: generate-88x2eu-makefile.sh <output_dir> [module_name]
 
 OUTPUT_DIR="$1"
+MODULE_NAME="${2:-88x2eu}"
 
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 <output_dir>"
+    echo "Usage: $0 <output_dir> [module_name]"
+    exit 1
+fi
+
+if [[ ! "$MODULE_NAME" =~ ^[A-Za-z0-9_]+$ ]]; then
+    echo "Invalid module name: $MODULE_NAME"
     exit 1
 fi
 
@@ -65,7 +71,6 @@ EXTRA_CFLAGS += -DCONFIG_REGD_SRC_FROM_OS -DCONFIG_RTW_TX_NPATH_EN
 EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
 EXTRA_CFLAGS += -DCONFIG_RTW_SDIO_PM_KEEP_POWER
 EXTRA_CFLAGS += -I$(src)/include -I$(src)/platform -I$(src)/hal/btc
-EXTRA_CFLAGS += -I$(srctree)/drivers/88x2eu/include -I$(srctree)/drivers/88x2eu/platform -I$(srctree)/drivers/88x2eu/hal/btc
 EXTRA_CFLAGS += -Wno-unused-variable -Wno-unused-value -Wno-unused-label
 EXTRA_CFLAGS += -Wno-unused-parameter -Wno-unused-function -Wno-unused
 EXTRA_CFLAGS += -Wno-uninitialized
@@ -118,17 +123,9 @@ _HAL_INTFS_FILES := hal/hal_intf.o \
 	hal/hal_halmac.o \
 	hal/HalPwrSeqCmd.o
 
-# RTL8822E specific files
-_HAL_INTFS_FILES += hal/$(RTL871X)/Hal8812PwrSeq.o \
-	hal/$(RTL871X)/Hal8821APwrSeq.o \
-	hal/$(RTL871X)/$(RTL871X)_xmit.o \
-	hal/$(RTL871X)/$(RTL871X)_sreset.o \
-	hal/$(RTL871X)/$(RTL871X)_hal_init.o \
-	hal/$(RTL871X)/$(RTL871X)_phycfg.o \
-	hal/$(RTL871X)/$(RTL871X)_rf6052.o \
-	hal/$(RTL871X)/$(RTL871X)_dm.o \
-	hal/$(RTL871X)/$(RTL871X)_rxdesc.o \
-	hal/$(RTL871X)/$(RTL871X)_cmd.o \
+# RTL8822E specific files. The chipset-specific source files in this tree
+# are listed explicitly below; older Realtek package names are not present.
+_HAL_INTFS_FILES += \
 	hal/$(RTL871X)/hal8822e_fw.o \
 	hal/$(RTL871X)/hal8822e_fw_10M.o \
 	hal/$(RTL871X)/rtl8822e_halinit.o \
@@ -305,5 +302,12 @@ _PLATFORM_FILES := platform/platform_ops.o
 # Force in-tree module build even when no Kconfig symbol is enabled.
 obj-m += 88x2eu.o
 MAKEFILE_END
+
+# Keep the source tree name (88x2eu) in include paths, while allowing the
+# output module to use the conventional 8812eu name for this driver.
+sed -i \
+    -e "s/^88x2eu-objs :=/${MODULE_NAME}-objs :=/" \
+    -e "s/^obj-m += 88x2eu\.o$/obj-m += ${MODULE_NAME}.o/" \
+    "$OUTPUT_DIR/Makefile"
 
 echo "[+] Generated 88x2eu Makefile in $OUTPUT_DIR"

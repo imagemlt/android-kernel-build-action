@@ -41,7 +41,7 @@ jobs:
         with:
           arch: ${{ matrix.arch }}
           tag: ${{ matrix.tag }}
-          module-name: 88x2eu
+          module-name: 8812eu
           module-path: 88x2eu
 
   upload-artifact:
