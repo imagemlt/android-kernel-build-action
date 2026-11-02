@@ -83,7 +83,8 @@ endif
 HCI_NAME := usb
 RTL871X := rtl8822e
 ccflags-y += $(EXTRA_CFLAGS)
-subdir-ccflags-y += $(EXTRA_CFLAGS)
+ccflags-y += -I$(src)/include -I$(src)/platform -I$(src)/hal/btc
+subdir-ccflags-y += $(EXTRA_CFLAGS) -I$(src)/include -I$(src)/platform -I$(src)/hal/btc
 
 # OS interface files
 _OS_INTFS_FILES := os_dep/osdep_service.o \
